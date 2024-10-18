@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+ 		<meta charset="UTF-8">
+ 		<title>Media REST API Service</title>
+	</head>
+	<body>
+		<h1 style="display: inline-block;">Welcome to the Media Library REST Service </h1>
+		<br>
+		<a href="/api/login"> Employee Portal </a>
+		<br>
+		<a href="/api/dvdlib">Click here to see our entire catalog.</a>
+		<br>
+		<form method="get" action="/api/search">
+			<label>DVD Title or UUID:</label>
+			<input id="title_search" name="request" type="text"/>
+			<button type="submit" onclick="'/api/search'">DVD Details</button>
+			<button type="reset">Reset</button>
+		</form>
+		<br>
+		<br>
+	</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Dashboard</title>
+</head>
+    
+<body>
+    <h1>Employee Dashboard <button id="logoutButton"> Logout </button> </h1>
+    <br>
+    <a href='/api/dvdlib'> Entire Catalog </a>
+    <br>
+    <form method="get" id="get_dvd" action="/api/search">
+        <label>DVD Title or UUID:</label>
+        <input id="title_search" name="request" type="text" required/>
+        <button type="submit" id="searchDVDButton">DVD Details</button>
+    </form>
+    <br>
+    <form method="post" action="/api/delete">
+    	<label>DVD UUID:</label>
+    	<input id="title_delete" name="uuid" type="text" required/>
+    	<button type="submit">Delete DVD</button>
+	</form>
+    <br>
+	<form method="post" id="add_dvd">
+    	<label>Title:</label>
+    	<input id="title" name="title" type="text" required/>
+    	<label>Genre:</label>
+    	<input id="genre" name="genre" type="text" required/>
+    	<label>Amount:</label>
+    	<input id="amount" name="amount" type="number" required/>
+    	<button type="button" id="addDVDButton">Add DVD</button>
+	</form>
+	<br>
+	<form method="post" id="edit_dvd">
+		<label>UUID To Edit:</label>
+    	<input id="uuid" name="uuid" type="text" required/>
+    	<label>Change Genre:</label>
+    	<input id="edit_genre" name="edit_genre" type="text" required/>
+    	<label>Change Amount:</label>
+    	<input id="edit_amount" name="edit_amount" type="number" required/>
+    	<button type="button" id="editDVDButton">Edit DVD</button>
+	</form>
+
+<script>
+    document.getElementById("addDVDButton").addEventListener("click", function () 
+    {
+        // Get form input values
+        var title = document.getElementById("title").value;
+        var genre = document.getElementById("genre").value;
+        var amount = document.getElementById("amount").value;
+        
+
+        // Check if required fields are filled
+        if (title.trim() === '' || genre.trim() === '' || isNaN(amount) || amount <= 0) 
+        {
+            alert("Please fill in all fields with valid data.");
+            return;
+        }
+
+        // Create a JavaScript object with the form data
+        var dvdData = {
+            title: title,
+            genre: genre,
+            amount: parseInt(amount)
+        };
+
+        // Send the data as JSON via a fetch request
+        fetch('/api/createdvd', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dvdData)
+        }).then(function(response) {
+            // Handle the response here if needed
+        }).catch(function(error) {
+            console.error('Error:', error);
+        });
+    });
+</script>
+<script>
+	document.getElementById("editDVDButton").addEventListener("click", function()
+	{
+		var uuid = document.getElementById("uuid").value;
+        var editGenre = document.getElementById("edit_genre").value;
+        var editAmount = document.getElementById("edit_amount").value;
+        
+     	// Check if required fields are filled
+        if (isNaN(uuid) || uuid <= 0 || editGenre.trim() === '' || isNaN(editAmount) || editAmount <= 0) 
+        {
+            alert("Please fill in all fields with valid data.");
+            return;
+        }
+     	
+     	var dvdData = {
+     			uuid: uuid,
+     			genre: editGenre,
+     			amount: parseInt(editAmount)
+     	}
+     	
+     	fetch('/api/editdvd', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dvdData)
+        }).then(function(response) {
+            // Handle the response here if needed
+        }).catch(function(error) {
+            console.error('Error:', error);
+        });
+	});
+</script>
+<script> 
+    document.getElementById("logoutButton").addEventListener("click", function() 
+    {
+        // Redirect to the /api/logout route when the button is clicked
+        window.location.href = "/api/logout";
+    });
+</script>
+</html>

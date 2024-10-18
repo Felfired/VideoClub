@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.felfired.dvd</groupId>
+  <artifactId>dvd</artifactId>
+  <version>0.0.1</version>
+  <name>DVD REST Library</name>
+  
+  <properties>  
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- plugin versions -->
+    <maven-compiler.version>3.8.1</maven-compiler.version>
+    <!-- Dependencies versions -->
+	<mysql.version>8.0.33</mysql.version>
+	<spark.version>2.9.4</spark.version>
+	<gson.version>2.10.1</gson.version>
+	<slf4j.version>1.7.21</slf4j.version>
+  </properties>
+  
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+	<plugins>
+		<plugin>
+	  		<groupId>org.codehaus.mojo</groupId>
+	  		<artifactId>exec-maven-plugin</artifactId>
+	  		<executions>
+	    		<execution>
+	      			<goals>
+	        			<goal>java</goal>
+	      			</goals>
+	    		</execution>
+	        </executions>
+	  		<configuration>
+	    		<mainClass>com.felfired.dvd.service.DVDService</mainClass>
+	  		</configuration>
+        </plugin>
+		 <plugin>
+	        <artifactId>maven-assembly-plugin</artifactId>
+	        <configuration>
+	          <descriptorRefs>
+	            <descriptorRef>jar-with-dependencies</descriptorRef>
+	          </descriptorRefs>
+	          <archive>
+	            <manifest> <!-- allowing the execution of the jar with â€“jar JVM switch -->
+	              <mainClass>com.felfired.dvd.service.DVDService</mainClass>
+	            </manifest>
+          	  </archive>
+	        </configuration>
+	        <executions>
+	          <execution>
+	            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+	            <phase>package</phase> <!-- bind to the packaging phase -->
+	            <goals>
+	              <goal>single</goal>
+	            </goals>
+	          </execution>
+	        </executions>    
+        </plugin>
+		
+	</plugins>
+  </build>
+  
+  <dependencies>	
+	<!-- DB Dependencies -->
+	<dependency>
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	    <version>${mysql.version}</version>
+	</dependency>
+	
+	<!-- SPARK -->
+	<dependency>
+    	<groupId>com.sparkjava</groupId>
+    	<artifactId>spark-core</artifactId>
+    	<version>${spark.version}</version>
+	</dependency>
+	
+	<!-- Logging -->
+	<dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-simple</artifactId>
+    	<version>${slf4j.version}</version>
+	</dependency>
+	
+	<!-- Gson -->
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${gson.version}</version>
+    </dependency>
+  </dependencies>
+  
+  <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>

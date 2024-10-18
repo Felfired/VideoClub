@@ -1,0 +1,100 @@
+package com.felfired.dvd.configuration;
+
+import java.io.InputStream;
+import java.util.Properties;
+
+public final class DBProperties 
+{
+    private static String dbName;
+    private static String dbHost;
+    private static String dbPort;
+    private static String login;
+    private static String pwd;
+
+    private DBProperties() {}
+	
+    static 
+    {
+    	getProperties();
+    }
+	 
+    private static Properties loadPropertyFile()
+    {
+    	try
+    	{
+    		InputStream input = DBProperties.class.getClassLoader().getResourceAsStream("service.properties");
+    		Properties prop = new Properties(); 
+    		if (input == null) 
+    		{ 
+    			System.out.println("Sorry, unable to find service.properties"); 	
+    			return null; 
+    		}
+    		prop.load(input); 
+    		return prop;
+    	} 
+    	catch (Exception ex) 
+    	{ 
+    		ex.printStackTrace();
+    	}
+    	return null;
+    }
+    
+    private static String getDefaultValueIfNull(final String s, final String defaultVal) 
+    {
+    	if (s == null || s.trim().equals("")) return defaultVal;
+    	else return s;
+    }
+
+	private static void getProperties()
+	{
+		Properties props = loadPropertyFile();
+		if (props != null)
+		{
+			dbName = getDefaultValueIfNull(props.getProperty("dbName"),"");
+			dbHost = getDefaultValueIfNull(props.getProperty("dbHost"),"");
+			dbPort = getDefaultValueIfNull(props.getProperty("dbPort"),"");
+			login = getDefaultValueIfNull(props.getProperty("login"),"");
+			pwd = getDefaultValueIfNull(props.getProperty("pwd"),"");
+		}
+		try 
+		{
+			String altDbHost = System.getenv("DB_HOST");
+			if (altDbHost != null && !altDbHost.equals("")) dbHost = altDbHost;
+			String loginVar = System.getenv("DB_USER");
+			if (loginVar != null && !loginVar.equals("")) login = loginVar;
+			String pwdVar = System.getenv("DB_PWD");
+			if (pwdVar != null && !pwdVar.equals("")) pwd = pwdVar;
+		}
+		catch(Exception e) {}
+	}
+	
+	public static String getDbName() 
+	{
+		return dbName;
+	}
+	
+	public static String getDbHost() 
+	{
+		return dbHost;
+	}
+	
+	public static void setDbHost(String dbHost) 
+	{
+		DBProperties.dbHost = dbHost;
+	}
+	
+	public static String getDbPort() 
+	{
+		return dbPort;
+	}
+
+	public static String getLogin() 
+	{
+		return login;
+	}
+	
+	public static String getPwd() 
+	{
+		return pwd;
+	}
+}
